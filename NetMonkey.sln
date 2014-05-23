@@ -12,6 +12,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2F07D5
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9FE86F2D-FE54-4012-AAB3-B3758F961FDE}"
+	ProjectSection(SolutionItems) = preProject
+		NetMonkey.nuspec = NetMonkey.nuspec
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetMonkey.Tests", "NetMonkey\NetMonkey.Tests\NetMonkey.Tests.csproj", "{1FC6DC3C-919C-491B-B18C-33EEBDA19FA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +29,10 @@ Global
 		{BCE8F465-BFB7-47DD-82A9-99F83D3FBA1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCE8F465-BFB7-47DD-82A9-99F83D3FBA1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCE8F465-BFB7-47DD-82A9-99F83D3FBA1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FC6DC3C-919C-491B-B18C-33EEBDA19FA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FC6DC3C-919C-491B-B18C-33EEBDA19FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FC6DC3C-919C-491B-B18C-33EEBDA19FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FC6DC3C-919C-491B-B18C-33EEBDA19FA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

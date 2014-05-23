@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>NetMonkey</id>
+    <version>1.0</version>
+    <title>Isogeo Domain Model</title>
+    <authors>mcartoixa</authors>
+    <owners>mcartoixa</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A .NET wrapper for the MailChimp API.</description>
+    <projectUrl>https://github.com/mcartoixa/NetMonkey</projectUrl>
+    <tags>MailChimp</tags>
+    <dependencies>
+      <dependency id="Common.Logging" version="2.2" />
+      <dependency id="Microsoft.Net.Http" version="2.2" />
+      <dependency id="Newtonsoft.Json" version="6.0" />
+    </dependencies>
+    <references>
+      <reference file="NetMonkey.dll" />
+    </references>
+  </metadata>
+  <files>
+    <file src="src\NetMonkey.dll" target="lib\net45" />
+  </files>
+</package>
