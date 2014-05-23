@@ -70,7 +70,7 @@ namespace NetMonkey {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à The specified JSON value was not recognized as valid: expecting {2} but found {3}.
+        ///   Recherche une chaîne localisée semblable à The specified JSON value was not recognized as valid: expecting {0} but found {1}.
         /// </summary>
         internal static string InvalidJsonExpectingException {
             get {

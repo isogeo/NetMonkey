@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
@@ -24,8 +25,14 @@ namespace NetMonkey.Serialization
         {
             JsonContract contract=base.CreateContract(objectType);
 
+            if (typeof(CultureInfo).IsAssignableFrom(objectType))
+                contract.Converter=new Serialization.CultureInfoJsonConverter();
+
             if ((objectType==typeof(DateTime)) || (objectType==typeof(DateTime?)))
                 contract.Converter=new DateTimeJsonConverter();
+
+            if (objectType.IsEnum || (objectType.IsGenericType && (objectType.GetGenericTypeDefinition()==typeof(Nullable<>)) && objectType.GetGenericArguments()[0].IsEnum))
+                contract.Converter=new StringEnumConverter() { CamelCaseText=true };
 
             return contract;
         }

@@ -35,7 +35,7 @@ namespace NetMonkey.Tests
                 Name="Users"
             };
 
-            var lists=await client.ListAsync(filter, null, null, null, null, new CancellationToken());
+            var lists=await client.ListAsync(new CancellationToken(), filter);
             Assert.Equal(1, lists.Total);
             Assert.Equal(1, lists.Data.Count);
         }
