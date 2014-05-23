@@ -17,7 +17,6 @@ namespace NetMonkey
 
 
 
-
     ////////////////////////////////////////////////////////////////////////////
     ///
     /// <summary>Client for the <see href="http://apidocs.mailchimp.com/api/2.0/">MailChimp v2.0 API</see>.</summary>
@@ -55,6 +54,12 @@ namespace NetMonkey
                     )
                 )
             };
+
+            _SerializerSettings=new JsonSerializerSettings() {
+                ContractResolver=new Serialization.MailChimpJsonContractResolver(),
+                Formatting=Formatting.None,
+                NullValueHandling=NullValueHandling.Ignore,
+            };
         }
 
         /// <summary>Finalizes the current instance.</summary>
@@ -70,19 +75,36 @@ namespace NetMonkey
             GC.SuppressFinalize(this);
         }
 
-        //public async Task GetLists(object filters, int? start, int? limit, SortField? sortField, SortDirection? sortDirection)
-        //{
-        //    dynamic parameters=new ExpandoObject();
-        //    parameters.apikey=_ApiKey;
-        //    parameters.filters=filters;
-        //    parameters.start=start;
-        //    parameters.limit=limit;
-        //    parameters.sort_field=sortField;
-        //    parameters.sort_dir=sortDirection;
+        #region Lists Related
+        /// <summary>Retrieve all of the lists defined for your user account.</summary>
+        /// <param name="filters">Filters to apply to this query</param>
+        /// <param name="start">Control paging of lists, start results at this list number.</param>
+        /// <param name="limit">Control paging of lists, number of lists to return with each call.</param>
+        /// <param name="sortField">The field used to sort results.</param>
+        /// <param name="sortDirection"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<ListResult> ListAsync(ListFilter filters, int? start, int? limit, SortField? sortField, SortDirection? sortDirection, CancellationToken cancellationToken)
+        {
+            dynamic parameters=new ExpandoObject();
+            parameters.apikey=_ApiKey;
+            if (filters!=null)
+                parameters.filters=filters;
+            if (start.HasValue)
+                parameters.start=start.Value;
+            if (limit.HasValue)
+                parameters.limit=limit.Value;
+            if (sortField.HasValue)
+                parameters.sort_field=sortField.Value;
+            if (sortDirection.HasValue)
+                parameters.sort_dir=sortDirection.Value;
 
-        //    throw new NotImplementedException();
-        //}
+            var rm=await RequestAsync(new Uri("/2.0/lists/list.json", UriKind.Relative), parameters, cancellationToken);
+            return JsonConvert.DeserializeObject<ListResult>(await rm.Content.ReadAsStringAsync(), _SerializerSettings);
+        }
+        #endregion
 
+        #region Helper Related
         /// <summary>Ping the MailChimp API.</summary>
         /// <param name="cancellationToken"></param>
         /// <returns>A message related to the current API status.</returns>
@@ -95,6 +117,7 @@ namespace NetMonkey
             var response=JObject.Parse(await rm.Content.ReadAsStringAsync());
             return response.msg;
         }
+        #endregion
 
         private void Dispose(bool disposing)
         {
@@ -117,14 +140,7 @@ namespace NetMonkey
             HttpContent content=null;
             if (parameters!=null)
             {
-                var json=JsonConvert.SerializeObject(
-                    parameters,
-                    Formatting.None,
-                    new JsonSerializerSettings() {
-                        Formatting=Formatting.None,
-                        NullValueHandling=NullValueHandling.Ignore
-                    }
-                );
+                var json=JsonConvert.SerializeObject(parameters, Formatting.None, _SerializerSettings);
                 content=new StringContent(json, Encoding.UTF8, "application/json");
             } else
                 content=new StringContent( string.Empty );
@@ -143,7 +159,7 @@ namespace NetMonkey
                 _Logger.DebugFormat(CultureInfo.InvariantCulture, "HTTP response: {0}", response.StatusCode);
 
                 if (!response.IsSuccessStatusCode)
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync());
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
                 response.EnsureSuccessStatusCode();
             }
             return response;
@@ -161,6 +177,7 @@ namespace NetMonkey
         private string _ApiKey;
         private ILog _Logger;
         private HttpClient _Client;
+        private JsonSerializerSettings _SerializerSettings;
 
         private const string _BaseUri="https://{0}.api.mailchimp.com/";
     }

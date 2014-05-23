@@ -61,11 +61,38 @@ namespace NetMonkey {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à The specified JSON value was not recognized ({0},{1}).
+        ///   Recherche une chaîne localisée semblable à The specified JSON value was not recognized as valid.
+        /// </summary>
+        internal static string InvalidJsonException {
+            get {
+                return ResourceManager.GetString("InvalidJsonException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The specified JSON value was not recognized as valid: expecting {2} but found {3}.
+        /// </summary>
+        internal static string InvalidJsonExpectingException {
+            get {
+                return ResourceManager.GetString("InvalidJsonExpectingException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The specified JSON value was not recognized as valid ({0},{1}).
         /// </summary>
         internal static string InvalidJsonLineInfoException {
             get {
                 return ResourceManager.GetString("InvalidJsonLineInfoException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The specified JSON value was not recognized as valid ({0},{1}): expecting {2} but found {3}.
+        /// </summary>
+        internal static string InvalidJsonLineInfoExpectingException {
+            get {
+                return ResourceManager.GetString("InvalidJsonLineInfoExpectingException", resourceCulture);
             }
         }
         

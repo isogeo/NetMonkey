@@ -3,9 +3,19 @@
 namespace NetMonkey
 {
 
-    //public enum SortField
-    //{
-    //    Created=0,
-    //    Web
-    //}
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    ///
+    /// <summary>Sort field.</summary>
+    ///
+    ////////////////////////////////////////////////////////////////////////////
+
+    public enum SortField
+    {
+        /// <summary>Creation date.</summary>
+        Created=0,
+        /// <summary>Web order.</summary>
+        Web
+    }
 }

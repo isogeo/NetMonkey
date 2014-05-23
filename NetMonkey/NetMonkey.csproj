@@ -74,11 +74,17 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="ListFilter.cs" />
+    <Compile Include="ListData.cs" />
+    <Compile Include="ListResult.cs" />
     <Compile Include="MailChimpClient.cs" />
     <Compile Include="MailChimpExceptionKind.cs" />
     <Compile Include="MailChimpException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\DateTimeJsonConverter.cs" />
     <Compile Include="Serialization\MailChimpExceptionJsonConverter.cs" />
+    <Compile Include="Serialization\MailChimpJsonContractResolver.cs" />
+    <Compile Include="Serialization\SerializationUtils.cs" />
     <Compile Include="SortDirection.cs" />
     <Compile Include="SortField.cs" />
     <Compile Include="SR.Designer.cs">

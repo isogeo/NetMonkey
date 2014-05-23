@@ -3,9 +3,19 @@
 namespace NetMonkey
 {
 
-    //public enum SortDirection
-    //{
-    //    Descending=0,
-    //    Ascending
-    //}
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    ///
+    /// <summary>Sort direction.</summary>
+    ///
+    ////////////////////////////////////////////////////////////////////////////
+
+    public enum SortDirection
+    {
+        /// <summary>Descending order.</summary>
+        Descending=0,
+        /// <summary>Ascending order.</summary>
+        Ascending
+    }
 }
