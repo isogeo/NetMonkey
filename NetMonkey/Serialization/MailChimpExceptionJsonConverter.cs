@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace NetMonkey.Serialization
@@ -19,6 +18,31 @@ namespace NetMonkey.Serialization
     public class MailChimpExceptionJsonConverter:
         JsonConverter
     {
+
+        private struct ExceptionMetadata
+        {
+
+            public MailChimpExceptionKind Kind;
+            public Type ExceptionType;
+        }
+
+        static MailChimpExceptionJsonConverter()
+        {
+            _MailChimpExceptionMetadata=new Dictionary<string, ExceptionMetadata>();
+
+            foreach(var kind in typeof(MailChimpExceptionKind).GetFields())
+            {
+                var attribute=(MailChimpExceptionAttribute)Attribute.GetCustomAttribute(kind, typeof(MailChimpExceptionAttribute));
+                if (attribute!=null)
+                    _MailChimpExceptionMetadata.Add(
+                        attribute.Error,
+                        new ExceptionMetadata() {
+                            Kind=(MailChimpExceptionKind)kind.GetValue(null),
+                            ExceptionType=attribute.ExceptionType ?? typeof(MailChimpException)
+                        }
+                    );
+            }
+        }
 
         /// <summary>Determines whether this instance can convert the specified object type.</summary>
         /// <param name="objectType">The type of the object.</param>
@@ -45,6 +69,7 @@ namespace NetMonkey.Serialization
             string message=null;
             int code=0;
             MailChimpExceptionKind kind=MailChimpExceptionKind.Unknown;
+            Type exceptionType=typeof(MailChimpException);
 
             while(reader.Read() && (reader.TokenType==JsonToken.PropertyName))
             {
@@ -62,29 +87,15 @@ namespace NetMonkey.Serialization
                 case "name":
                     if (reader.TokenType!=JsonToken.String)
                         throw new JsonReaderException(SR.InvalidJsonLineInfoException);
-                    switch(reader.Value.ToString())
+
+                    if (_MailChimpExceptionMetadata!=null)
                     {
-                    case "Invalid_ApiKey":
-                        kind=MailChimpExceptionKind.ApiInvalidKey;
-                        break;
-                    case "User_Disabled":
-                        kind=MailChimpExceptionKind.UserDisabled;
-                        break;
-                    case "User_InvalidRole":
-                        kind=MailChimpExceptionKind.UserInvalidRole;
-                        break;
-                    case "Too_Many_Connections":
-                        kind=MailChimpExceptionKind.ApiTooManyConnections;
-                        break;
-                    case "User_UnderMaintenance":
-                        kind=MailChimpExceptionKind.UserUnderMaintenance;
-                        break;
-                    case "User_InvalidAction":
-                        kind=MailChimpExceptionKind.UserInvalidAction;
-                        break;
-                    case "ValidationError":
-                        kind=MailChimpExceptionKind.ApiValidationError;
-                        break;
+                        string v=reader.Value.ToString();
+                        if (_MailChimpExceptionMetadata.ContainsKey(v))
+                        {
+                            kind=_MailChimpExceptionMetadata[v].Kind;
+                            exceptionType=_MailChimpExceptionMetadata[v].ExceptionType;
+                        }
                     }
                     break;
                 case "error":
@@ -98,7 +109,7 @@ namespace NetMonkey.Serialization
             if (reader.TokenType!=JsonToken.EndObject)
                 throw new JsonReaderException(SR.InvalidJsonLineInfoException);
 
-            return new MailChimpException(message, code, kind);
+            return Activator.CreateInstance(exceptionType, BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { message, code, kind }, CultureInfo.InvariantCulture);
         }
 
         /// <summary>Writes the JSON representation of the object.</summary>
@@ -120,5 +131,7 @@ namespace NetMonkey.Serialization
                 return false;
             }
         }
+
+        private static IDictionary<string, ExceptionMetadata> _MailChimpExceptionMetadata;
     }
 }

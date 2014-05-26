@@ -23,7 +23,7 @@ namespace NetMonkey.Tests
         {
             var client=new MailChimpClient("test-us4");
 
-            var mcex=await AssertEx.ThrowsAsync<MailChimpException>(async () => await client.PingAsync(new CancellationToken()));
+            var mcex=await AssertEx.ThrowsAsync<ApiException>(async () => await client.PingAsync(new CancellationToken()));
             Assert.Equal(MailChimpExceptionKind.ApiInvalidKey, mcex.Kind);
         }
 
