@@ -18,4 +18,4 @@ A .NET wrapper for the MailChimp API v2.0.
 # Development
 
 - Run `build.bat` to resolve NuGet dependencies beforehand, or the Visual Studio solutions will not load.
-- The `Isogeo.Api.dev.sln` solution is meant for development. Other solutions are used by the build scripts.
+- The `NetMonkey.Tests.sln` solution is meant to be used for development. This and other solutions are used by the build scripts.

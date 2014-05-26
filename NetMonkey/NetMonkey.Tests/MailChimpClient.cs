@@ -39,5 +39,23 @@ namespace NetMonkey.Tests
             Assert.Equal(1, lists.Total);
             Assert.Equal(1, lists.Data.Count);
         }
+
+        [Fact(Skip="Requires a valid MailChimp API key")]
+        public async Task MemberInfo_ShouldReturnData()
+        {
+            var client=new MailChimpClient("test-us4");
+            var filter=new ListFilter() {
+                Name="Users"
+            };
+            var lists=await client.ListAsync(new CancellationToken(), filter);
+            var lid=lists.Data[0].Identifier;
+            var email=new Email() {
+                Address="admin-app@isogeo.com"
+            };
+
+            var info=await client.MemberInfoAsync<MergeVariables>(lid, new [] { email }, new CancellationToken());
+
+            Assert.Equal(1, info.SuccessCount);
+        }
     }
 }

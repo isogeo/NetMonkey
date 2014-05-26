@@ -24,7 +24,7 @@ namespace NetMonkey
         public int SuccessCount { get; set; }
 
         /// <summary>The number of subscribers who were not found on the list.</summary>
-        [JsonProperty("success_count")]
+        [JsonProperty("error_count")]
         public int ErrorCount { get; set; }
 
         /// <summary>The members found.</summary>

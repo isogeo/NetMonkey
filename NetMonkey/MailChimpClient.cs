@@ -82,7 +82,7 @@ namespace NetMonkey
         /// <param name="emails">The emails to find.</param>
         /// <param name="cancellationToken">A cancellation token.</param>
         /// <returns>The information for the members of the list.</returns>
-        public async Task<MemberInfoResult<TMergeVariables>> MemberInfo<TMergeVariables>(string id, IEnumerable<Email> emails, CancellationToken cancellationToken)
+        public async Task<MemberInfoResult<TMergeVariables>> MemberInfoAsync<TMergeVariables>(string id, IEnumerable<Email> emails, CancellationToken cancellationToken)
             where TMergeVariables:
                 MergeVariables
         {
@@ -135,7 +135,9 @@ namespace NetMonkey
         /// <param name="sendWelcome">If your <paramref name="doubleOptIn" /> is false and this is true, we will send your lists Welcome email
         /// if this subscribe succeeds - this will *not* fire if we end up updating an existing subscriber. If <paramref name="doubleOptIn" /> is true, this has no effect.</param>
         /// <returns>The email information.</returns>
-        public async Task<Email> SubscribeAsync(string id, Email email, CancellationToken cancellationToken, MergeVariables mergeVars=null, EmailType? emailType=null, bool? doubleOptIn=null, bool? updateExisting=null, bool? replaceInterests=null, bool? sendWelcome=null)
+        public async Task<Email> SubscribeAsync<TMergeVariables>(string id, Email email, CancellationToken cancellationToken, TMergeVariables mergeVars=null, EmailType? emailType=null, bool? doubleOptIn=null, bool? updateExisting=null, bool? replaceInterests=null, bool? sendWelcome=null)
+            where TMergeVariables:
+                MergeVariables
         {
             dynamic parameters=new ExpandoObject();
             parameters.apikey=_ApiKey;

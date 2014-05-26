@@ -33,5 +33,9 @@ namespace NetMonkey
         /// <summary>Set the Opt-in Time field.</summary>
         [JsonProperty("mc_language")]
         public CultureInfo Language { get; set; }
+
+        /// <summary>INterest groupings.</summary>
+        [JsonProperty("groupings")]
+        public List<Grouping> Groupings { get; set; }
     }
 }

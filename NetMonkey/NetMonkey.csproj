@@ -74,6 +74,8 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="Group.cs" />
+    <Compile Include="Grouping.cs" />
     <Compile Include="MemberInfoData.cs" />
     <Compile Include="MemberInfoResult.cs" />
     <Compile Include="MergeVariables.cs" />
