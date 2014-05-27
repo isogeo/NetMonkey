@@ -28,6 +28,9 @@ namespace NetMonkey.Serialization
             if (typeof(CultureInfo).IsAssignableFrom(objectType))
                 contract.Converter=new Serialization.CultureInfoJsonConverter();
 
+            if (typeof(Grouping).IsAssignableFrom(objectType))
+                contract.Converter=new Serialization.GroupingJsonConverter();
+
             if ((objectType==typeof(DateTime)) || (objectType==typeof(DateTime?)))
                 contract.Converter=new DateTimeJsonConverter();
 

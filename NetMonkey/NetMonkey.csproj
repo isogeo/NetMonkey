@@ -75,6 +75,7 @@
       <Link>Properties\Version.cs</Link>
     </Compile>
     <Compile Include="ListException.cs" />
+    <Compile Include="Serialization\GroupingJsonConverter.cs" />
     <Compile Include="UserException.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="Grouping.cs" />

@@ -14,6 +14,7 @@ namespace NetMonkey
     ////////////////////////////////////////////////////////////////////////////
 
     [JsonObject(MemberSerialization.OptIn)]
+    [JsonConverter(typeof(Serialization.GroupingJsonConverter))]
     public class Grouping
     {
 
