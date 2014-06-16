@@ -34,7 +34,7 @@ namespace NetMonkey
         [JsonProperty("mc_language")]
         public CultureInfo Language { get; set; }
 
-        /// <summary>INterest groupings.</summary>
+        /// <summary>Interest groupings.</summary>
         [JsonProperty("groupings")]
         public List<Grouping> Groupings { get; set; }
     }

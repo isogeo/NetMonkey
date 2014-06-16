@@ -36,59 +36,58 @@ namespace NetMonkey.Serialization
         /// <returns>The object value.</returns>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-        //    if (reader.TokenType==JsonToken.Null)
-        //        return null;
+            if (reader.TokenType==JsonToken.Null)
+                return null;
 
-        //    Grouping ret=new Grouping();
-        //    if (reader.TokenType==JsonToken.StartObject)
-        //    {
-        //        while (reader.Read())
-        //        {
-        //            if (reader.TokenType==JsonToken.PropertyName)
-        //            {
-        //                switch (reader.Value.ToString())
-        //                {
-        //                case "id":
-        //                    if (!reader.Read() || reader.TokenType!=JsonToken.Integer)
-        //                        throw SerializationUtils.CreateJsonException(reader, JsonToken.Integer);
-        //                    ret.Identifier=Convert.ToInt32(reader.Value);
-        //                    break;
-        //                case "name":
-        //                    if (!reader.Read() || reader.TokenType!=JsonToken.String)
-        //                        throw SerializationUtils.CreateJsonException(reader, JsonToken.String);
-        //                    ret.Name=reader.Value.ToString();
-        //                    break;
-        //                // deserialize
-        //                case "groups":
-        //                    if (!reader.Read() || reader.TokenType!=JsonToken.StartArray)
-        //                        throw SerializationUtils.CreateJsonException(reader, JsonToken.StartArray);
-        //                    ret.Groups=new List<Group>();
-        //                    while(reader.Read() && (reader.TokenType!=JsonToken.EndArray))
-        //                    {
-        //                        if (reader.TokenType==JsonToken.String)
-        //                        {
-        //                            ret.Groups.Add(new Group() { Name = reader.Value.ToString() });
-        //                        } else if (reader.TokenType==JsonToken.StartObject)
-        //                        {
-        //                            if (reader.TokenType!=JsonToken.EndObject)
-        //                                throw SerializationUtils.CreateJsonException(reader, JsonToken.EndObject);
+            Grouping ret=new Grouping();
+            if (reader.TokenType==JsonToken.StartObject)
+            {
+                while (reader.Read())
+                {
+                    if (reader.TokenType==JsonToken.PropertyName)
+                    {
+                        switch (reader.Value.ToString())
+                        {
+                        case "id":
+                            if (!reader.Read() || reader.TokenType!=JsonToken.Integer)
+                                throw SerializationUtils.CreateJsonException(reader, JsonToken.Integer);
+                            ret.Identifier=Convert.ToInt32(reader.Value);
+                            break;
+                        case "name":
+                            if (!reader.Read() || reader.TokenType!=JsonToken.String)
+                                throw SerializationUtils.CreateJsonException(reader, JsonToken.String);
+                            ret.Name=reader.Value.ToString();
+                            break;
+                        // deserialize
+                        case "groups":
+                            if (!reader.Read() || reader.TokenType!=JsonToken.StartArray)
+                                throw SerializationUtils.CreateJsonException(reader, JsonToken.StartArray);
+                            ret.Groups=new List<Group>();
+                            while (reader.Read() && (reader.TokenType!=JsonToken.EndArray))
+                            {
+                                if (reader.TokenType==JsonToken.String)
+                                {
+                                    ret.Groups.Add(new Group() { Name = reader.Value.ToString() });
+                                } else if (reader.TokenType==JsonToken.StartObject)
+                                {
+                                    if (reader.TokenType!=JsonToken.EndObject)
+                                        throw SerializationUtils.CreateJsonException(reader, JsonToken.EndObject);
 
-        //                        } else
-        //                            throw SerializationUtils.CreateJsonException(reader, JsonToken.String);
-        //                    }
-        //                    break;
-        //                }
-        //            } else
-        //                throw SerializationUtils.CreateJsonException(reader, JsonToken.PropertyName);
-        //        }
-        //    } else
-        //        throw SerializationUtils.CreateJsonException(reader, JsonToken.StartObject);
+                                } else
+                                    throw SerializationUtils.CreateJsonException(reader, JsonToken.String);
+                            }
+                            break;
+                        }
+                    } else
+                        throw SerializationUtils.CreateJsonException(reader, JsonToken.PropertyName);
+                }
+            } else
+                throw SerializationUtils.CreateJsonException(reader, JsonToken.StartObject);
 
-        //    if (!reader.Read() || (reader.TokenType!=JsonToken.EndObject))
-        //        throw SerializationUtils.CreateJsonException(reader, JsonToken.EndObject);
+            if (!reader.Read() || (reader.TokenType!=JsonToken.EndObject))
+                throw SerializationUtils.CreateJsonException(reader, JsonToken.EndObject);
 
-        //    return ret;
-            throw new NotImplementedException();
+            return ret;
         }
 
         /// <summary>Writes the JSON representation of the object. </summary>
