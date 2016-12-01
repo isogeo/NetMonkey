@@ -15,6 +15,8 @@
 
 
 
+COLOR 07
+
 :: Reset ERRORLEVEL
 VERIFY OTHER 2>nul
 SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
@@ -34,7 +36,9 @@ GOTO ARGS
 :: Builds the project
 :: -------------------------------------------------------------------
 :BUILD
-.nuget\NuGet.exe install ".nuget\packages.config" -o packages -source "https://nuget.org/api/v2/" -source "http://nuget.hq.isogeo.fr/nuget/" -source "%LocalAppData%\NuGet\Cache"
+PUSHD .nuget
+NuGet.exe restore "packages.config" -PackagesDirectory ..\packages
+POPD
 msbuild.exe %PROJECT% /nologo /t:%TARGET% /m:%NUMBER_OF_PROCESSORS% /p:GenerateDocumentation="%GENERATE_DOCUMENTATION%" /fl /flp:logfile=build.log;verbosity=%VERBOSITY%;encoding=UTF-8 /nr:False
 
 IF ERRORLEVEL 1 (
