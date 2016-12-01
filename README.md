@@ -1,7 +1,9 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/e83vlonrwpuhmq5m/branch/master?svg=true)](https://ci.appveyor.com/project/mcartoixa/netmonkey/branch/master)
+
 NetMonkey
 =========
 
-A .NET wrapper for the MailChimp API v2.0.
+A .NET wrapper for the MailChimp API v3.0.
 
 ## Description
 
@@ -16,10 +18,9 @@ NetMonkey is [another .NET wrapper](http://apidocs.mailchimp.com/api/downloads/#
 - Run the following command from this directory: `build.bat`
 - Prerequisites:
   * Microsoft .NET Framework 4.5
-  * Microsoft Visual Studio 2013
-  * [MSBuild.Community.Tasks 1.3](http://msbuildtasks.tigris.org/)
-  * FxCop 10.0
-  * [PartCover.NET 4.0.20908](http://github.com/sawilde/partcover.net4)
+  * Microsoft Visual Studio 2015
+  * [MSBuild.Community.Tasks 1.5.0](https://github.com/loresoft/msbuildtasks)
+  * [OpenCover 4.6](https://github.com/OpenCover/opencover)
 
 
 
