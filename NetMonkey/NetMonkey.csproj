@@ -81,6 +81,7 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="FieldsQuery.cs" />
     <Compile Include="ListQuery.cs" />
     <Compile Include="Model\ListResults.cs" />
     <Compile Include="LoggerMessageHandler.cs" />

@@ -1,27 +1,28 @@
-﻿using System.Globalization;
-using System.Web;
+﻿using System.Collections.Specialized;
+using System.Globalization;
 
 namespace NetMonkey
 {
 
     /// <summary>Parameters for a qury about lists.</summary>
-    public class ListQuery
+    public class ListQuery:
+        FieldsQuery<Model.ListResults>
     {
 
-        /// <summary>Converts the value of this instance to a query string representation.</summary>
-        /// <returns>The query string representation of this instance.</returns>
-        public override string ToString()
+        /// <summary>Gets the query parameters for the current instance.</summary>
+        /// <returns>The query parameters for the current instance.</returns>
+        protected override NameValueCollection GetQueryParameters()
         {
-            var query = HttpUtility.ParseQueryString("");
+            var parameters=base.GetQueryParameters();
 
             if (Count.HasValue)
-                query["count"]=Count.Value.ToString("G", CultureInfo.InvariantCulture);
+                parameters.Add("count", Count.Value.ToString("G", CultureInfo.InvariantCulture));
             if (Offset.HasValue)
-                query["offset"]=Offset.Value.ToString("G", CultureInfo.InvariantCulture);
+                parameters.Add("offset", Offset.Value.ToString("G", CultureInfo.InvariantCulture));
             if (!string.IsNullOrWhiteSpace(Email))
-                query["email"]=Email;
+                parameters.Add("email", Email);
 
-            return query.ToString();
+            return parameters;
         }
 
         /// <summary>The number of records to return.</summary>
