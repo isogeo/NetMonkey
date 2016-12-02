@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using Newtonsoft.Json;
 
-namespace NetMonkey.Serialization
+namespace NetMonkey.Model.Serialization
 {
 
     internal static class SerializationUtils

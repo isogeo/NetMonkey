@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
@@ -14,33 +15,41 @@ namespace NetMonkey
     ///
     ////////////////////////////////////////////////////////////////////////////
 
-    [JsonConverter(typeof(Serialization.MailChimpExceptionJsonConverter))]
+    [JsonObject(MemberSerialization = MemberSerialization.OptIn)]
+    [Serializable]
     public class MailChimpException:
         Exception
     {
 
         /// <summary>Creates an new instance of the <see cref="MailChimpException" /> class.</summary>
-        protected MailChimpException()
-        {
-        }
+        internal MailChimpException():
+            base()
+        { }
+
+        /// <summary>Creates a new instance of the <see cref="MailChimpException" /> class.</summary>
+        /// <param name="message">The message of the exception.</param>
+        internal MailChimpException(string message) :
+            base(message)
+        { }
+
+        /// <summary>Creates a new instance of the <see cref="MailChimpException" /> class.</summary>
+        /// <param name="message">The message of the exception.</param>
+        /// <param name="inner">The inner exception.</param>
+        internal MailChimpException(string message, Exception inner) :
+            base(message, inner)
+        { }
 
         /// <summary>Creates an new instance of the <see cref="MailChimpException" /> class.</summary>
         protected MailChimpException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
-            info.AddValue(_CodeValueName, _Code);
-            info.AddValue(_KindValueName, (int)_Kind);
-        }
+            if (!string.IsNullOrEmpty(Details))
+                info.AddValue("Message", Details);
 
-        /// <summary>Creates a new instance of the <see cref="MailChimpException" /> class.</summary>
-        /// <param name="message">The message of the exception.</param>
-        /// <param name="code">The MailChimp code related to the exception.</param>
-        /// <param name="kind">The MailChimp error kind.</param>
-        internal MailChimpException(string message, int code, MailChimpExceptionKind kind):
-            base(message ?? SR.UnknownMailChimpException)
-        {
-            _Code=code;
-            _Kind=kind;
+            info.AddValue("Instance", Instance);
+            info.AddValue("Status", (int)StatusCode);
+            info.AddValue("Type", Type);
+            info.AddValue("Title", Title);
         }
 
         /// <summary>Sets the <see cref="SerializationInfo" /> with information about the exception.</summary>
@@ -50,32 +59,39 @@ namespace NetMonkey
         {
             base.GetObjectData(info, context);
 
-            _Code=info.GetInt32(_CodeValueName);
-            _Kind=(MailChimpExceptionKind)info.GetInt32(_KindValueName);
+            Details=info.GetString("Message");
+            Instance=info.GetString("Instance");
+            StatusCode=(HttpStatusCode)info.GetInt32("Status");
+            Type=info.GetString("Type");
+            Title=info.GetString("Title");
         }
 
-        /// <summary>Gets the MailChimp code related to the exception.</summary>
-        public int Code
+        /// <summary>Gets the instance concerned by this exception.</summary>
+        [JsonProperty(PropertyName = "instance")]
+        public string Instance { get; internal protected set; }
+
+        /// <summary>Gets the status associated with this exception.</summary>
+        [JsonProperty(PropertyName = "status")]
+        public HttpStatusCode StatusCode { get; internal protected set; }
+
+        /// <summary>Gets the type of this exception.</summary>
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; internal protected set; }
+
+        /// <summary>Gets the title of this exception.</summary>
+        [JsonProperty(PropertyName = "title")]
+        public string Title { get; internal protected set; }
+
+        /// <summary>Gets the message for this exception.</summary>
+        public override string Message
         {
             get
             {
-                return _Code;
+                return Details ?? base.Message;
             }
         }
 
-        /// <summary>The MailChimp error kind.</summary>
-        public MailChimpExceptionKind Kind
-        {
-            get
-            {
-                return _Kind;
-            }
-        }
-
-        private const string _CodeValueName="Code";
-        private const string _KindValueName="Kind";
-
-        private int _Code;
-        private MailChimpExceptionKind _Kind;
+        [JsonProperty(PropertyName = "details")]
+        internal string Details { get; set; }
     }
 }

@@ -1,20 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using Common.Logging;
 using Newtonsoft.Json;
 
-namespace NetMonkey.Serialization
+namespace NetMonkey.Model.Serialization
 {
 
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    ///
     /// <summary>Converts a <see cref="CultureInfo" /> to JSON.</summary>
-    ///
-    ////////////////////////////////////////////////////////////////////////////
-
     public class CultureInfoJsonConverter:
         JsonConverter
     {
@@ -45,7 +37,7 @@ namespace NetMonkey.Serialization
                     return CultureInfo.GetCultureInfo((string)reader.Value);
                 } catch (CultureNotFoundException cnfex)
                 {
-                    LogManager.GetCurrentClassLogger().Warn(CultureInfo.InvariantCulture, m => m(SR.InvalidJsonException, reader.Value), cnfex);
+                    LogManager.GetLogger<CultureInfoJsonConverter>().Warn(CultureInfo.InvariantCulture, m => m(SR.InvalidJsonException, reader.Value), cnfex);
 
                     return null;
                 }

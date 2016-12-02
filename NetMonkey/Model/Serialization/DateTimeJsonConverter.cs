@@ -1,23 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Common.Logging;
 using Newtonsoft.Json;
 
-namespace NetMonkey.Serialization
+namespace NetMonkey.Model.Serialization
 {
-
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    ///
     /// <summary>Converts a <see cref="DateTime" /> to JSON.</summary>
-    ///
-    ////////////////////////////////////////////////////////////////////////////
-
     public class DateTimeJsonConverter:
         JsonConverter
     {
@@ -48,7 +36,7 @@ namespace NetMonkey.Serialization
                     return DateTime.Parse((string)reader.Value, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
                 } catch (FormatException fex)
                 {
-                    LogManager.GetCurrentClassLogger().Warn(CultureInfo.InvariantCulture, m => m(SR.InvalidJsonException, reader.Value), fex);
+                    LogManager.GetLogger<DateTimeJsonConverter>().Warn(CultureInfo.InvariantCulture, m => m(SR.InvalidJsonException, reader.Value), fex);
 
                     return null;
                 }

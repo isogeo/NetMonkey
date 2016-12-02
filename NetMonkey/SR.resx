@@ -129,7 +129,4 @@
   <data name="InvalidJsonLineInfoExpectingException" xml:space="preserve">
     <value>The specified JSON value was not recognized as valid ({0},{1}): expecting {2} but found {3}</value>
   </data>
-  <data name="UnknownMailChimpException" xml:space="preserve">
-    <value>An unknown error has occurred</value>
-  </data>
 </root>
