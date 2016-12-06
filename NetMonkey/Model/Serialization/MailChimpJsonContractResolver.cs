@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Net.Mail;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
@@ -20,6 +21,9 @@ namespace NetMonkey.Model.Serialization
 
             if (typeof(CultureInfo).IsAssignableFrom(objectType))
                 contract.Converter=new CultureInfoJsonConverter();
+
+            if (typeof(MailAddress).IsAssignableFrom(objectType))
+                contract.Converter=new MailAddressJsonConverter();
 
             if ((objectType==typeof(DateTime)) || (objectType==typeof(DateTime?)))
                 contract.Converter=new DateTimeJsonConverter();

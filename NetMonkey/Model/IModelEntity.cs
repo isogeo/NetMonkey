@@ -10,6 +10,6 @@ namespace NetMonkey.Model
 
         /// <summary>A string that uniquely identifies this enity.</summary>
         [JsonProperty(PropertyName = "id")]
-        string Id { get; set; }
+        string Id { get; }
     }
 }

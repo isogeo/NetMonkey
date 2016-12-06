@@ -6,59 +6,52 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using System.Web;
 using Newtonsoft.Json;
 
 namespace NetMonkey
 {
 
     /// <summary>Base class for a query that can include or exclude fields.</summary>
-    /// <typeparam name="TModel"></typeparam>
-    public abstract class FieldsQuery<TModel>
+    /// <typeparam name="TModel">The model type that will be returned by the query.</typeparam>
+    public class FieldsQuery<TModel>:
+        BaseQuery
         where TModel:
             Model.IModelObject
     {
 
         /// <summary>Creates a new instance of the <see cref="FieldsQuery{TModel}"/> type.</summary>
-        protected FieldsQuery()
+        public FieldsQuery()
         { }
-
-        /// <summary>Converts the value of this instance to a query string representation.</summary>
-        /// <returns>The query string representation of this instance.</returns>
-        public override string ToString()
-        {
-            NameValueCollection parameters = GetQueryParameters();
-            if (parameters!=null)
-                return parameters.ToString();
-
-            return string.Empty;
-        }
 
         /// <summary>Excludes the specified property from the results.</summary>
         /// <typeparam name="TProperty">The type of the property to exclude.</typeparam>
         /// <param name="expression">The expression that specifies the path to the property.</param>
-        public void ExcludeProperty<TProperty>(Expression<Func<TModel, TProperty>> expression)
+        public FieldsQuery<TModel> ExcludeProperty<TProperty>(Expression<Func<TModel, TProperty>> expression)
         {
             if (ExcludedProperties==null)
                 ExcludedProperties=new List<LambdaExpression>();
             ExcludedProperties.Add(expression);
+
+            return this;
         }
 
         /// <summary>Specifically includes the specified property in the results.</summary>
         /// <typeparam name="TProperty">The type of the property to include.</typeparam>
         /// <param name="expression">The expression that specifies the path to the property.</param>
-        public void IncludeProperty<TProperty>(Expression<Func<TModel, TProperty>> expression)
+        public FieldsQuery<TModel> IncludeProperty<TProperty>(Expression<Func<TModel, TProperty>> expression)
         {
             if (IncludedProperties==null)
                 IncludedProperties=new List<LambdaExpression>();
             IncludedProperties.Add(expression);
+
+            return this;
         }
 
         /// <summary>Gets the query parameters for the current instance.</summary>
         /// <returns>The query parameters for the current instance.</returns>
-        protected virtual NameValueCollection GetQueryParameters()
+        protected override NameValueCollection GetQueryParameters()
         {
-            var parameters = HttpUtility.ParseQueryString("");
+            var parameters = base.GetQueryParameters();
 
             if ((IncludedProperties!=null) && IncludedProperties.Any())
             {

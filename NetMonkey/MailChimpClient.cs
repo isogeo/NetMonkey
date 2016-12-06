@@ -1,28 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Dynamic;
 using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mail;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace NetMonkey
 {
 
-
-
-    ////////////////////////////////////////////////////////////////////////////
-    ///
     /// <summary>Client for the <see href="http://developer.mailchimp.com/documentation/mailchimp/">MailChimp v3.0 API</see>.</summary>
-    ///
-    ////////////////////////////////////////////////////////////////////////////
-
     public class MailChimpClient:
         IDisposable
     {
@@ -79,10 +70,111 @@ namespace NetMonkey
             GC.SuppressFinalize(this);
         }
 
-        /// <summary>Get information about all lists in the account.</summary>
-        /// <param name="query">The query.</param>
+        /// <summary>Adds the specified member to the specified list.</summary>
+        /// <param name="listId">The unique id for the list.</param>
+        /// <param name="member">The new member to add.</param>
+        /// <returns>The new list member.</returns>
+        public async Task<Model.ListMember> AddListMember(string listId, Model.ListMember member)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(listId));
+            if (string.IsNullOrEmpty(listId))
+                throw new ArgumentNullException("listId");
+            Debug.Assert(member!=null);
+            if (member==null)
+                throw new ArgumentNullException("member");
+
+            var uriBuilder = new UriBuilder(
+                new Uri(
+                    _Client.BaseAddress,
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "lists/{0}/members",
+                        listId
+                    )
+                )
+            );
+
+            var content = new StringContent(
+                JsonConvert.SerializeObject(member, Formatting.None, _SerializerSettings),
+                Encoding.UTF8,
+                _JsonMediaType
+            );
+            using (var response = await _Client.PostAsync(uriBuilder.Uri, content))
+                if (response.IsSuccessStatusCode)
+                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                else
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+        }
+
+        /// <summary>Gets information about a list’s interest categories.</summary>
+        /// <param name="listId">The unique id for the list.</param>
+        /// <param name="query">The optional (but recommended) query.</param>
+        /// <returns>Information about a list’s interest categories.</returns>
+        public async Task<Model.InterestCategoryResults> GetInterestCategories(string listId, ResultsQuery<Model.InterestCategoryResults> query)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(listId));
+            if (string.IsNullOrEmpty(listId))
+                throw new ArgumentNullException("listId");
+
+            var uriBuilder = new UriBuilder(
+                new Uri(
+                    _Client.BaseAddress,
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "lists/{0}/interest-categories",
+                        listId
+                    )
+                )
+            );
+            if (query!=null)
+                uriBuilder.Query=query.ToString();
+
+            using (var response = await _Client.GetAsync(uriBuilder.Uri))
+                if (response.IsSuccessStatusCode)
+                    return JsonConvert.DeserializeObject<Model.InterestCategoryResults>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                else
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+        }
+
+        /// <summary>Gets a list of this category’s interests.</summary>
+        /// <param name="listId">The unique id for the list.</param>
+        /// <param name="categoryId">The unique id for the interest category.</param>
+        /// <param name="query">The optional (but recommended) query.</param>
+        /// <returns>The list of this category’s interests</returns>
+        public async Task<Model.InterestResults> GetInterests(string listId, string categoryId, ResultsQuery<Model.InterestResults> query)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(listId));
+            if (string.IsNullOrEmpty(listId))
+                throw new ArgumentNullException("listId");
+            Debug.Assert(!string.IsNullOrEmpty(categoryId));
+            if (string.IsNullOrEmpty(categoryId))
+                throw new ArgumentNullException("categoryId");
+
+            var uriBuilder = new UriBuilder(
+                new Uri(
+                    _Client.BaseAddress,
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "lists/{0}/interest-categories/{1}/interests",
+                        listId,
+                        categoryId
+                    )
+                )
+            );
+            if (query!=null)
+                uriBuilder.Query=query.ToString();
+
+            using (var response = await _Client.GetAsync(uriBuilder.Uri))
+                if (response.IsSuccessStatusCode)
+                    return JsonConvert.DeserializeObject<Model.InterestResults>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                else
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+        }
+
+        /// <summary>Gets information about all lists in the account.</summary>
+        /// <param name="query">The optional (but recommended) query.</param>
         /// <returns>Information about lists in the account.</returns>
-        public async Task<Model.ListResults> GetLists(ListQuery query)
+        public async Task<Model.ListResults> GetLists(ResultsQuery<Model.ListResults> query)
         {
             var uriBuilder = new UriBuilder(
                 new Uri(
@@ -96,6 +188,84 @@ namespace NetMonkey
             using (var response = await _Client.GetAsync(uriBuilder.Uri))
                 if (response.IsSuccessStatusCode)
                     return JsonConvert.DeserializeObject<Model.ListResults>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                else
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+        }
+
+        /// <summary>Gets information about a specific list member.</summary>
+        /// <param name="listId">The unique id for the list.</param>
+        /// <param name="address">The list member’s email address.</param>
+        /// <param name="query">The optional (but recommended) query.</param>
+        /// <returns>Information about a specific list member.</returns>
+        public async Task<Model.ListMember> GetListMember(string listId, MailAddress address, FieldsQuery<Model.ListMember> query)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(listId));
+            if (string.IsNullOrEmpty(listId))
+                throw new ArgumentNullException("listId");
+            Debug.Assert(address!=null);
+            if (address==null)
+                throw new ArgumentNullException("address");
+
+            var uriBuilder = new UriBuilder(
+                new Uri(
+                    _Client.BaseAddress,
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "lists/{0}/members/{1}",
+                        listId,
+                        address.GetMailChimpSubscriberHash()
+                    )
+                )
+            );
+            if (query!=null)
+                uriBuilder.Query=query.ToString();
+
+            using (var response = await _Client.GetAsync(uriBuilder.Uri))
+                if (response.IsSuccessStatusCode)
+                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                else
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+        }
+
+        /// <summary>Updates information for a specific list member.</summary>
+        /// <param name="listId">The unique id for the list.</param>
+        /// <param name="address">The list member’s email address.</param>
+        /// <param name="member">The member information to update.</param>
+        /// <returns>The updated information for the list member.</returns>
+        public async Task<Model.ListMember> UpdateListMember(string listId, MailAddress address, Model.ListMember member)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(listId));
+            if (string.IsNullOrEmpty(listId))
+                throw new ArgumentNullException("listId");
+            Debug.Assert(address!=null);
+            if (address==null)
+                throw new ArgumentNullException("address");
+            Debug.Assert(member!=null);
+            if (member==null)
+                throw new ArgumentNullException("member");
+
+            var uriBuilder = new UriBuilder(
+                new Uri(
+                    _Client.BaseAddress,
+                    string.Format(
+                        CultureInfo.InvariantCulture,
+                        "lists/{0}/members/{1}",
+                        listId,
+                        address.GetMailChimpSubscriberHash()
+                    )
+                )
+            );
+
+            var request = new HttpRequestMessage(new HttpMethod("PATCH"), uriBuilder.Uri) {
+                Content=new StringContent(
+                    JsonConvert.SerializeObject(member, Formatting.None, _SerializerSettings),
+                    Encoding.UTF8,
+                    _JsonMediaType
+                )
+            };
+            using (var response = await _Client.SendAsync(request))
+                if (response.IsSuccessStatusCode)
+                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
                 else
                     throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
         }
@@ -161,5 +331,6 @@ namespace NetMonkey
         private JsonSerializerSettings _SerializerSettings;
 
         private const string _BaseUri="https://{0}.api.mailchimp.com/3.0/";
+        private const string _JsonMediaType = "application/json";
     }
 }

@@ -10,7 +10,7 @@ namespace NetMonkey.Model
 
         /// <summary>A string that uniquely identifies this list.</summary>
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        public string Id { get; internal set; }
 
         /// <summary>The name of the list.</summary>
         [JsonProperty(PropertyName = "name")]
@@ -30,6 +30,6 @@ namespace NetMonkey.Model
 
         /// <summary>Whether the list supports <see href="http://kb.mailchimp.com/lists/growth/how-to-change-list-name-and-defaults"> multiple formats for emails</see>.</summary>
         [JsonProperty(PropertyName = "email_type_option")]
-        public string HasEmailTypeOption { get; set; }
+        public bool? HasEmailTypeOption { get; set; }
     }
 }

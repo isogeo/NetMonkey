@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 namespace NetMonkey.Model
 {
 
-    /// <summary>Results for a lists reltaed query.</summary>
+    /// <summary>Results for a lists related query.</summary>
     public class ListResults:
-        IModelObject
+        IResults
     {
 
         /// <summary>An array of objects, each representing a list.</summary>

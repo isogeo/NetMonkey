@@ -28,7 +28,7 @@ namespace NetMonkey.Model
         [JsonProperty(PropertyName = "state")]
         public string State { get; set; }
 
-        /// <summary>	The postal or zip code for the list contact.</summary>
+        /// <summary>The postal or zip code for the list contact.</summary>
         [JsonProperty(PropertyName = "zip")]
         public string Zip { get; set; }
 
