@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -26,6 +27,7 @@ namespace NetMonkey
         /// <summary>Excludes the specified property from the results.</summary>
         /// <typeparam name="TProperty">The type of the property to exclude.</typeparam>
         /// <param name="expression">The expression that specifies the path to the property.</param>
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "This is the way expressions are meant to be used")]
         public FieldsQuery<TModel> ExcludeProperty<TProperty>(Expression<Func<TModel, TProperty>> expression)
         {
             if (ExcludedProperties==null)
@@ -38,6 +40,7 @@ namespace NetMonkey
         /// <summary>Specifically includes the specified property in the results.</summary>
         /// <typeparam name="TProperty">The type of the property to include.</typeparam>
         /// <param name="expression">The expression that specifies the path to the property.</param>
+        [SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "This is the way expressions are meant to be used")]
         public FieldsQuery<TModel> IncludeProperty<TProperty>(Expression<Func<TModel, TProperty>> expression)
         {
             if (IncludedProperties==null)
@@ -100,6 +103,7 @@ namespace NetMonkey
             return parameters;
         }
 
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "Nope")]
         private void _CreateJsonPath(StringBuilder builder, Expression expression)
         {
             Debug.Assert(builder!=null);

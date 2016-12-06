@@ -87,6 +87,7 @@
     <Compile Include="MailAddressExtensions.cs" />
     <Compile Include="Model\Interest.cs" />
     <Compile Include="Model\InterestResults.cs" />
+    <Compile Include="Model\Serialization\MailChimpExceptionJsonConverter.cs" />
     <Compile Include="Model\Serialization\MailAddressJsonConverter.cs" />
     <Compile Include="ResultsQuery.cs" />
     <Compile Include="ListQuery.cs" />

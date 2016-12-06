@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Net.Mail;
 using System.Security.Cryptography;
@@ -13,6 +13,7 @@ namespace NetMonkey
         /// <summary>Get the subscriber hash for the current mail address.</summary>
         /// <param name="address">The address.</param>
         /// <returns>The subscriber hash.</returns>
+        [SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "This is the way MailChimp hashes are calculated")]
         public static string GetMailChimpSubscriberHash(this MailAddress address)
         {
             if (address==null)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -22,15 +23,16 @@ namespace NetMonkey
         { }
 
         /// <summary>Creates a new instance of the <see cref="MailChimpClient" /> class.</summary>
-        /// <param name="apiKey">The MailChimp API key to use.</param>
-        public MailChimpClient(string apiKey):
+        /// <param name="key">The MailChimp API key to use.</param>
+        [SuppressMessage("Microsoft.Reliability", "CA1006:DisposeObjectsBeforeLosingScope", Justification = "The base class will take care of that")]
+        public MailChimpClient(string key):
             this()
         {
-            Debug.Assert(!string.IsNullOrEmpty(apiKey));
-            if (string.IsNullOrEmpty(apiKey))
+            Debug.Assert(!string.IsNullOrEmpty(key));
+            if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException("apiKey");
 
-            _ApiKey=apiKey;
+            _ApiKey=key;
 
             var dataCenter=ApiKey.Split('-')[1];
             _Client=new HttpClient(new LoggerMessageHandler()) {
@@ -282,38 +284,6 @@ namespace NetMonkey
             }
 
             _Client=null;
-            _Logger=null;
-        }
-
-
-        private async Task<HttpResponseMessage> RequestAsync(Uri uri, object parameters, CancellationToken cancellationToken)
-        {
-            HttpContent content=null;
-            if (parameters!=null)
-            {
-                var json=JsonConvert.SerializeObject(parameters, Formatting.None, _SerializerSettings);
-                content=new StringContent(json, Encoding.UTF8, "application/json");
-            } else
-                content=new StringContent( string.Empty );
-
-            if (_Logger.IsDebugEnabled)
-            {
-                var s=await content.ReadAsStringAsync();
-                _Logger.DebugFormat(CultureInfo.InvariantCulture, "HTTP {1}: {0}\n{2}", uri, HttpMethod.Post, s);
-            } else
-                _Logger.TraceFormat(CultureInfo.InvariantCulture, "HTTP {1}: {0}", uri, HttpMethod.Post);
-
-            var response=await _Client.PostAsync(uri, content, cancellationToken).ConfigureAwait(false);
-
-            if (response!=null)
-            {
-                _Logger.DebugFormat(CultureInfo.InvariantCulture, "HTTP response: {0}", response.StatusCode);
-
-                if (!response.IsSuccessStatusCode)
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
-                response.EnsureSuccessStatusCode();
-            }
-            return response;
         }
 
         /// <summary>Gets the current MailChimp API key.</summary>
@@ -326,7 +296,6 @@ namespace NetMonkey
         }
 
         private string _ApiKey;
-        private ILog _Logger;
         private HttpClient _Client;
         private JsonSerializerSettings _SerializerSettings;
 

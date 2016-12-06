@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading;
@@ -12,6 +13,7 @@ namespace NetMonkey
         DelegatingHandler
     {
 
+        [SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope", Justification = "The base class will take care of that")]
         public LoggerMessageHandler() :
             base(new WebRequestHandler())
         {
