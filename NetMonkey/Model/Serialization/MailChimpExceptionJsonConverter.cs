@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -27,6 +28,13 @@ namespace NetMonkey.Model.Serialization
         /// <returns>The object value.</returns>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
+            Debug.Assert(reader!=null);
+            if (reader==null)
+                throw new ArgumentNullException("reader");
+            Debug.Assert(serializer!=null);
+            if (serializer==null)
+                throw new ArgumentNullException("serializer");
+
             if (reader.TokenType==JsonToken.Null)
                 return null;
 
@@ -36,7 +44,7 @@ namespace NetMonkey.Model.Serialization
             MailChimpException ret = null;
 
             var jobj = (JObject)JToken.ReadFrom(reader);
-            var message=jobj.GetValue("detail");
+            var message=jobj.GetValue("detail", StringComparison.Ordinal);
             if (message!=null)
                 ret=new MailChimpException(message.Value<string>());
             else
@@ -53,6 +61,10 @@ namespace NetMonkey.Model.Serialization
         /// <param name="serializer">The calling serializer.</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            Debug.Assert(writer!=null);
+            if (writer==null)
+                throw new ArgumentNullException("writer");
+
             if (value==null)
             {
                 writer.WriteNull();
@@ -63,10 +75,10 @@ namespace NetMonkey.Model.Serialization
             if (mcex!=null)
             {
                 writer.WriteStartObject();
-                if (!string.IsNullOrEmpty(mcex.Type))
+                if (!string.IsNullOrEmpty(mcex.Kind))
                 {
                     writer.WritePropertyName("type");
-                    writer.WriteValue(mcex.Type);
+                    writer.WriteValue(mcex.Kind);
                 }
                 if (!string.IsNullOrEmpty(mcex.Title))
                 {

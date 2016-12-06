@@ -6,9 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mail;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using Common.Logging;
 using Newtonsoft.Json;
 
 namespace NetMonkey
@@ -24,13 +22,13 @@ namespace NetMonkey
 
         /// <summary>Creates a new instance of the <see cref="MailChimpClient" /> class.</summary>
         /// <param name="key">The MailChimp API key to use.</param>
-        [SuppressMessage("Microsoft.Reliability", "CA1006:DisposeObjectsBeforeLosingScope", Justification = "The base class will take care of that")]
+        [SuppressMessage("Microsoft.Reliability", "CA2000:DisposeObjectsBeforeLosingScope", Justification = "The base class will take care of that")]
         public MailChimpClient(string key):
             this()
         {
             Debug.Assert(!string.IsNullOrEmpty(key));
             if (string.IsNullOrEmpty(key))
-                throw new ArgumentNullException("apiKey");
+                throw new ArgumentNullException("key");
 
             _ApiKey=key;
 

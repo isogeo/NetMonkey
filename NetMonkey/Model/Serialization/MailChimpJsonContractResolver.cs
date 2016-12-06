@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Net.Mail;
 using Newtonsoft.Json.Converters;
@@ -17,7 +18,11 @@ namespace NetMonkey.Model.Serialization
         /// <returns>A <see cref="JsonContract" /> for the given type.</returns>
         protected override JsonContract CreateContract(Type objectType)
         {
-            JsonContract contract=base.CreateContract(objectType);
+            Debug.Assert(objectType!=null);
+            if (objectType==null)
+                throw new ArgumentNullException("objectType");
+
+            JsonContract contract =base.CreateContract(objectType);
 
             if (typeof(CultureInfo).IsAssignableFrom(objectType))
                 contract.Converter=new CultureInfoJsonConverter();

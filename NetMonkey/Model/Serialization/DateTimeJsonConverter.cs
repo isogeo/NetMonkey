@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using Common.Logging;
 using Newtonsoft.Json;
@@ -26,6 +27,10 @@ namespace NetMonkey.Model.Serialization
         /// <returns>The <see cref="MailChimpException" /> instance.</returns>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
+            Debug.Assert(reader!=null);
+            if (reader==null)
+                throw new ArgumentNullException("reader");
+
             if (reader.TokenType==JsonToken.Null)
                 return null;
 
@@ -51,6 +56,10 @@ namespace NetMonkey.Model.Serialization
         /// <param name="serializer">The calling serializer.</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
+            Debug.Assert(writer!=null);
+            if (writer==null)
+                throw new ArgumentNullException("writer");
+
             if (value==null)
             {
                 writer.WriteNull();

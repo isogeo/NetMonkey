@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace NetMonkey
@@ -14,15 +16,25 @@ namespace NetMonkey
     {
 
         /// <summary>Creates an new instance of the <see cref="MailChimpException" /> class.</summary>
+        [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors", Justification = "Nobody should be able to create this ecxeption anyway")]
         internal MailChimpException():
             base()
         { }
 
         /// <summary>Creates an new instance of the <see cref="MailChimpException" /> class.</summary>
         /// <param name="message">The message for the exception.</param>
+        [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors", Justification = "Nobody should be able to create this ecxeption anyway")]
         internal MailChimpException(string message):
             base(message)
         { }
+
+        /// <summary>Creates an new instance of the <see cref="MailChimpException" /> class.</summary>
+        /// <param name="info">The serialization information.</param>
+        /// <param name="context">The streaming context.</param>
+        protected MailChimpException(SerializationInfo info, StreamingContext context):
+            base(info, context)
+        { }
+
 
         /// <summary>Gets the instance concerned by this exception.</summary>
         [JsonProperty(PropertyName = "instance")]
@@ -58,17 +70,17 @@ namespace NetMonkey
 
         /// <summary>Gets the type of this exception.</summary>
         [JsonProperty(PropertyName = "type")]
-        public string Type
+        public string Kind
         {
             get
             {
-                if (!Data.Contains("Type"))
+                if (!Data.Contains("Kind"))
                     return null;
-                return Data["Type"] as string;
+                return Data["Kind"] as string;
             }
             internal protected set
             {
-                Data["Type"]=value;
+                Data["Kind"]=value;
             }
         }
 

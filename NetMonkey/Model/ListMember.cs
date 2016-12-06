@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net.Mail;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ namespace NetMonkey.Model
 
         /// <summary>The MD5 hash of the lowercase version of the list member’s email address.</summary>
         [JsonProperty(PropertyName = "id")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Setter is needed for JSON deserialization")]
         public string Id { get; internal set; }
 
         /// <summary>Email address for a subscriber.</summary>
@@ -29,10 +31,12 @@ namespace NetMonkey.Model
 
         /// <summary>An individual merge var and value for a member.</summary>
         [JsonProperty(PropertyName = "merge_fields")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is needed for JSON deserialization")]
         public Dictionary<string, string> MergeFields { get; set; }
 
         /// <summary>The key of this object’s properties is the ID of the interest in question.</summary>
         [JsonProperty(PropertyName = "interests")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is needed for JSON deserialization")]
         public Dictionary<string, bool> Interests { get; set; }
 
         /// <summary>The default language for this lists’s forms.</summary>
@@ -45,6 +49,7 @@ namespace NetMonkey.Model
 
         /// <summary>The list id.</summary>
         [JsonProperty(PropertyName = "list_id")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Setter is needed for JSON deserialization")]
         public string ListId { get; internal set; }
     }
 }

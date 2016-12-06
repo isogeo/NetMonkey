@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 
 namespace NetMonkey.Model
 {
@@ -10,6 +11,7 @@ namespace NetMonkey.Model
 
         /// <summary>A string that uniquely identifies this list.</summary>
         [JsonProperty(PropertyName = "id")]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Setter is needed for JSON deserialization")]
         public string Id { get; internal set; }
 
         /// <summary>The name of the list.</summary>

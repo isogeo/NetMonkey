@@ -7,7 +7,7 @@
         /// <summary>The member has been subscribed.</summary>
         Subscribed,
         /// <summary>The member has been unsubscribed.</summary>
-        unsubscribed,
+        Unsubscribed,
         /// <summary>The member has been cleaned.</summary>
         Cleaned,
         /// <summary>The member status is pending.</summary>
