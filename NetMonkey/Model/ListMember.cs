@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net.Mail;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace NetMonkey.Model
 {
@@ -30,7 +31,7 @@ namespace NetMonkey.Model
         public ListMemberStatus? Status { get; set; }
 
         /// <summary>An individual merge var and value for a member.</summary>
-        [JsonProperty(PropertyName = "merge_fields")]
+        [JsonProperty(PropertyName = "merge_fields", NamingStrategyType = typeof(DefaultNamingStrategy))]
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is needed for JSON deserialization")]
         public Dictionary<string, string> MergeFields { get; set; }
 
