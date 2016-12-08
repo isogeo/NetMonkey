@@ -50,7 +50,7 @@ namespace NetMonkey
                     )
                 )
             );
-            _SerializerSettings=new JsonSerializerSettings() {
+            SerializerSettings=new JsonSerializerSettings() {
                 ContractResolver=new Model.Serialization.MailChimpJsonContractResolver(),
                 Formatting=Formatting.None,
                 NullValueHandling=NullValueHandling.Ignore,
@@ -95,15 +95,15 @@ namespace NetMonkey
             );
 
             var content = new StringContent(
-                JsonConvert.SerializeObject(member, Formatting.None, _SerializerSettings),
+                JsonConvert.SerializeObject(member, Formatting.None, SerializerSettings),
                 Encoding.UTF8,
                 _JsonMediaType
             );
             using (var response = await _Client.PostAsync(uriBuilder.Uri, content))
                 if (response.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync(), SerializerSettings);
                 else
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), SerializerSettings);
         }
 
         /// <summary>Gets information about a list’s interest categories.</summary>
@@ -131,9 +131,9 @@ namespace NetMonkey
 
             using (var response = await _Client.GetAsync(uriBuilder.Uri))
                 if (response.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<Model.InterestCategoryResults>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                    return JsonConvert.DeserializeObject<Model.InterestCategoryResults>(await response.Content.ReadAsStringAsync(), SerializerSettings);
                 else
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), SerializerSettings);
         }
 
         /// <summary>Gets a list of this category’s interests.</summary>
@@ -166,9 +166,9 @@ namespace NetMonkey
 
             using (var response = await _Client.GetAsync(uriBuilder.Uri))
                 if (response.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<Model.InterestResults>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                    return JsonConvert.DeserializeObject<Model.InterestResults>(await response.Content.ReadAsStringAsync(), SerializerSettings);
                 else
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), SerializerSettings);
         }
 
         /// <summary>Gets information about all lists in the account.</summary>
@@ -187,9 +187,9 @@ namespace NetMonkey
 
             using (var response = await _Client.GetAsync(uriBuilder.Uri))
                 if (response.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<Model.ListResults>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                    return JsonConvert.DeserializeObject<Model.ListResults>(await response.Content.ReadAsStringAsync(), SerializerSettings);
                 else
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), SerializerSettings);
         }
 
         /// <summary>Gets information about a specific list member.</summary>
@@ -222,9 +222,9 @@ namespace NetMonkey
 
             using (var response = await _Client.GetAsync(uriBuilder.Uri))
                 if (response.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync(), SerializerSettings);
                 else
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), SerializerSettings);
         }
 
         /// <summary>Updates information for a specific list member.</summary>
@@ -258,16 +258,16 @@ namespace NetMonkey
 
             var request = new HttpRequestMessage(new HttpMethod("PATCH"), uriBuilder.Uri) {
                 Content=new StringContent(
-                    JsonConvert.SerializeObject(member, Formatting.None, _SerializerSettings),
+                    JsonConvert.SerializeObject(member, Formatting.None, SerializerSettings),
                     Encoding.UTF8,
                     _JsonMediaType
                 )
             };
             using (var response = await _Client.SendAsync(request))
                 if (response.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync(), SerializerSettings);
                 else
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), _SerializerSettings);
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), SerializerSettings);
         }
 
         private void Dispose(bool disposing)
@@ -293,9 +293,10 @@ namespace NetMonkey
             }
         }
 
+        /// <summary>Settings for the JSON serializer.</summary>
+        internal protected JsonSerializerSettings SerializerSettings;
         private string _ApiKey;
         private HttpClient _Client;
-        private JsonSerializerSettings _SerializerSettings;
 
         private const string _BaseUri="https://{0}.api.mailchimp.com/3.0/";
         private const string _JsonMediaType = "application/json";

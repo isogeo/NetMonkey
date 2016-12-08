@@ -10,7 +10,7 @@ namespace NetMonkey.Model.Serialization
 
     /// <summary>Resolves member mappings for domain model types.</summary>
     public class MailChimpJsonContractResolver:
-        CamelCasePropertyNamesContractResolver
+        DefaultContractResolver
     {
 
         /// <summary>Determines which contract type is created for the given <paramref name="objectType" />. </summary>
