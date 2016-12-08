@@ -24,12 +24,21 @@ namespace NetMonkey
         {
             HttpResponseMessage ret = null;
 
-            _Logger.InfoFormat(
-                CultureInfo.CurrentCulture,
-                "{1} {0}",
-                request.RequestUri,
-                request.Method
-            );
+            if ((request.Content!=null) && (_Logger.IsTraceEnabled))
+                _Logger.InfoFormat(
+                    CultureInfo.CurrentCulture,
+                    "{1} {0}: \"{2}\"",
+                    request.RequestUri,
+                    request.Method,
+                    await request.Content.ReadAsStringAsync()
+                );
+            else
+                _Logger.InfoFormat(
+                    CultureInfo.CurrentCulture,
+                    "{1} {0}",
+                    request.RequestUri,
+                    request.Method
+                );
 
             var timer = new Stopwatch();
             timer.Start();
@@ -39,7 +48,7 @@ namespace NetMonkey
             timer.Stop();
             if (ret!=null)
             {
-                if (_Logger.IsTraceEnabled && (ret.Content!=null))
+                if (ret.Content!=null)
                     _Logger.TraceFormat(
                         CultureInfo.InvariantCulture,
                         "{1} {0} - {2} ({3}) {4}ms: \"{5}\"",

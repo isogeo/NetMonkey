@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Runtime.Serialization;
@@ -97,6 +98,23 @@ namespace NetMonkey
             internal protected set
             {
                 Data["Title"]=value;
+            }
+        }
+
+        /// <summary>Gets the errors for this exception.</summary>
+        [JsonProperty(PropertyName = "errors")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = "Setter is needed for JSON deserialization")]
+        public IList<Model.MailChimpError> Errors
+        {
+            get
+            {
+                if (!Data.Contains("Errors"))
+                    return null;
+                return Data["Errors"] as IList<Model.MailChimpError>;
+            }
+            internal protected set
+            {
+                Data["Errors"]=value;
             }
         }
     }

@@ -85,6 +85,7 @@
     <Compile Include="FieldsQuery.cs" />
     <Compile Include="IQuery.cs" />
     <Compile Include="MailAddressExtensions.cs" />
+    <Compile Include="Model\MailChimpError.cs" />
     <Compile Include="Model\Interest.cs" />
     <Compile Include="Model\InterestResults.cs" />
     <Compile Include="Model\Serialization\MailChimpExceptionJsonConverter.cs" />
