@@ -43,7 +43,8 @@ namespace NetMonkey
             var timer = new Stopwatch();
             timer.Start();
 
-            ret=await base.SendAsync(request, cancellationToken);
+            ret=await base.SendAsync(request, cancellationToken)
+                .ConfigureAwait(false);
 
             timer.Stop();
             if (ret!=null)

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mail;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -73,8 +74,9 @@ namespace NetMonkey
         /// <summary>Adds the specified member to the specified list.</summary>
         /// <param name="listId">The unique id for the list.</param>
         /// <param name="member">The new member to add.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The new list member.</returns>
-        public async Task<Model.ListMember> AddListMember(string listId, Model.ListMember member)
+        public async Task<Model.ListMember> AddListMember(string listId, Model.ListMember member, CancellationToken cancellationToken)
         {
             Debug.Assert(!string.IsNullOrEmpty(listId));
             if (string.IsNullOrEmpty(listId))
@@ -99,18 +101,19 @@ namespace NetMonkey
                 Encoding.UTF8,
                 _JsonMediaType
             );
-            using (var response = await _Client.PostAsync(uriBuilder.Uri, content))
+            using (var response = await _Client.PostAsync(uriBuilder.Uri, content, cancellationToken).ConfigureAwait(false))
                 if (response.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync(), SerializerSettings);
+                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
                 else
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), SerializerSettings);
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
         }
 
         /// <summary>Gets information about a list’s interest categories.</summary>
         /// <param name="listId">The unique id for the list.</param>
         /// <param name="query">The optional (but recommended) query.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>Information about a list’s interest categories.</returns>
-        public async Task<Model.InterestCategoryResults> GetInterestCategories(string listId, ResultsQuery<Model.InterestCategoryResults> query)
+        public async Task<Model.InterestCategoryResults> GetInterestCategories(string listId, ResultsQuery<Model.InterestCategoryResults> query, CancellationToken cancellationToken)
         {
             Debug.Assert(!string.IsNullOrEmpty(listId));
             if (string.IsNullOrEmpty(listId))
@@ -129,19 +132,20 @@ namespace NetMonkey
             if (query!=null)
                 uriBuilder.Query=query.ToString();
 
-            using (var response = await _Client.GetAsync(uriBuilder.Uri))
+            using (var response = await _Client.GetAsync(uriBuilder.Uri, cancellationToken).ConfigureAwait(false))
                 if (response.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<Model.InterestCategoryResults>(await response.Content.ReadAsStringAsync(), SerializerSettings);
+                    return JsonConvert.DeserializeObject<Model.InterestCategoryResults>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
                 else
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), SerializerSettings);
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
         }
 
         /// <summary>Gets a list of this category’s interests.</summary>
         /// <param name="listId">The unique id for the list.</param>
         /// <param name="categoryId">The unique id for the interest category.</param>
         /// <param name="query">The optional (but recommended) query.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The list of this category’s interests</returns>
-        public async Task<Model.InterestResults> GetInterests(string listId, string categoryId, ResultsQuery<Model.InterestResults> query)
+        public async Task<Model.InterestResults> GetInterests(string listId, string categoryId, ResultsQuery<Model.InterestResults> query, CancellationToken cancellationToken)
         {
             Debug.Assert(!string.IsNullOrEmpty(listId));
             if (string.IsNullOrEmpty(listId))
@@ -164,17 +168,18 @@ namespace NetMonkey
             if (query!=null)
                 uriBuilder.Query=query.ToString();
 
-            using (var response = await _Client.GetAsync(uriBuilder.Uri))
+            using (var response = await _Client.GetAsync(uriBuilder.Uri, cancellationToken).ConfigureAwait(false))
                 if (response.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<Model.InterestResults>(await response.Content.ReadAsStringAsync(), SerializerSettings);
+                    return JsonConvert.DeserializeObject<Model.InterestResults>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
                 else
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), SerializerSettings);
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
         }
 
         /// <summary>Gets information about all lists in the account.</summary>
         /// <param name="query">The optional (but recommended) query.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>Information about lists in the account.</returns>
-        public async Task<Model.ListResults> GetLists(ResultsQuery<Model.ListResults> query)
+        public async Task<Model.ListResults> GetLists(ResultsQuery<Model.ListResults> query, CancellationToken cancellationToken)
         {
             var uriBuilder = new UriBuilder(
                 new Uri(
@@ -185,19 +190,20 @@ namespace NetMonkey
             if (query!=null)
                 uriBuilder.Query=query.ToString();
 
-            using (var response = await _Client.GetAsync(uriBuilder.Uri))
+            using (var response = await _Client.GetAsync(uriBuilder.Uri, cancellationToken).ConfigureAwait(false))
                 if (response.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<Model.ListResults>(await response.Content.ReadAsStringAsync(), SerializerSettings);
+                    return JsonConvert.DeserializeObject<Model.ListResults>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
                 else
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), SerializerSettings);
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
         }
 
         /// <summary>Gets information about a specific list member.</summary>
         /// <param name="listId">The unique id for the list.</param>
         /// <param name="address">The list member’s email address.</param>
         /// <param name="query">The optional (but recommended) query.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>Information about a specific list member.</returns>
-        public async Task<Model.ListMember> GetListMember(string listId, MailAddress address, FieldsQuery<Model.ListMember> query)
+        public async Task<Model.ListMember> GetListMember(string listId, MailAddress address, FieldsQuery<Model.ListMember> query, CancellationToken cancellationToken)
         {
             Debug.Assert(!string.IsNullOrEmpty(listId));
             if (string.IsNullOrEmpty(listId))
@@ -220,19 +226,20 @@ namespace NetMonkey
             if (query!=null)
                 uriBuilder.Query=query.ToString();
 
-            using (var response = await _Client.GetAsync(uriBuilder.Uri))
+            using (var response = await _Client.GetAsync(uriBuilder.Uri, cancellationToken).ConfigureAwait(false))
                 if (response.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync(), SerializerSettings);
+                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
                 else
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), SerializerSettings);
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
         }
 
         /// <summary>Updates information for a specific list member.</summary>
         /// <param name="listId">The unique id for the list.</param>
         /// <param name="address">The list member’s email address.</param>
         /// <param name="member">The member information to update.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The updated information for the list member.</returns>
-        public async Task<Model.ListMember> UpdateListMember(string listId, MailAddress address, Model.ListMember member)
+        public async Task<Model.ListMember> UpdateListMember(string listId, MailAddress address, Model.ListMember member, CancellationToken cancellationToken)
         {
             Debug.Assert(!string.IsNullOrEmpty(listId));
             if (string.IsNullOrEmpty(listId))
@@ -263,11 +270,11 @@ namespace NetMonkey
                     _JsonMediaType
                 )
             };
-            using (var response = await _Client.SendAsync(request))
+            using (var response = await _Client.SendAsync(request, cancellationToken).ConfigureAwait(false))
                 if (response.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync(), SerializerSettings);
+                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
                 else
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync(), SerializerSettings);
+                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
         }
 
         private void Dispose(bool disposing)
@@ -285,13 +292,7 @@ namespace NetMonkey
         }
 
         /// <summary>Gets the current MailChimp API key.</summary>
-        public string ApiKey
-        {
-            get
-            {
-                return _ApiKey;
-            }
-        }
+        public string ApiKey { get { return _ApiKey; } }
 
         /// <summary>Settings for the JSON serializer.</summary>
         internal protected JsonSerializerSettings SerializerSettings;
