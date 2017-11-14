@@ -293,6 +293,8 @@ namespace NetMonkey
 
         /// <summary>Gets the current MailChimp API key.</summary>
         public string ApiKey { get { return _ApiKey; } }
+        /// <summary>Gets the current base address for the client.</summary>
+        public Uri BaseUri { get { return _Client.BaseAddress; } }
 
         /// <summary>Settings for the JSON serializer.</summary>
         internal protected JsonSerializerSettings SerializerSettings;

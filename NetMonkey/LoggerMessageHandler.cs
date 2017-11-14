@@ -31,6 +31,7 @@ namespace NetMonkey
                     request.RequestUri,
                     request.Method,
                     await request.Content.ReadAsStringAsync()
+                        .ConfigureAwait(false)
                 );
             else
                 _Logger.InfoFormat(
@@ -59,6 +60,7 @@ namespace NetMonkey
                         (int)ret.StatusCode,
                         timer.ElapsedMilliseconds,
                         await ret.Content.ReadAsStringAsync()
+                            .ConfigureAwait(false)
                     );
                 else
                     _Logger.TraceFormat(
