@@ -26,7 +26,7 @@ namespace NetMonkey
 
             if ((request.Content!=null) && (_Logger.IsTraceEnabled))
             {
-                // Necessary as the content will be read multiple times
+                // Necessary as the content may be read multiple times
                 await request.Content.LoadIntoBufferAsync()
                     .ConfigureAwait(false);
                 _Logger.InfoFormat(
@@ -54,10 +54,9 @@ namespace NetMonkey
             timer.Stop();
             if (ret!=null)
             {
-                // The following code seems to create a deadlock in some situations
-                /*if (ret.Content!=null)
+                if (ret.Content!=null)
                 {
-                    // Necessary as the content will be read multiple times
+                    // Necessary as the content may be read multiple times
                     await ret.Content.LoadIntoBufferAsync()
                         .ConfigureAwait(false);
                     _Logger.TraceFormat(
@@ -71,7 +70,7 @@ namespace NetMonkey
                         await ret.Content.ReadAsStringAsync()
                             .ConfigureAwait(false)
                     );
-                } else*/
+                } else
                     _Logger.TraceFormat(
                         CultureInfo.InvariantCulture,
                         "{1} {0} - {2} ({3}) {4}ms",

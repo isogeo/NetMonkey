@@ -101,11 +101,12 @@ namespace NetMonkey
                 Encoding.UTF8,
                 _JsonMediaType
             );
-            using (var response = await _Client.PostAsync(uriBuilder.Uri, content, cancellationToken).ConfigureAwait(false))
-                if (response.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
-                else
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
+            using (content)
+                using (var response = await _Client.PostAsync(uriBuilder.Uri, content, cancellationToken).ConfigureAwait(false))
+                    if (response.IsSuccessStatusCode)
+                        return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
+                    else
+                        throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
         }
 
         /// <summary>Gets information about a list’s interest categories.</summary>
@@ -270,11 +271,12 @@ namespace NetMonkey
                     _JsonMediaType
                 )
             };
-            using (var response = await _Client.SendAsync(request, cancellationToken).ConfigureAwait(false))
-                if (response.IsSuccessStatusCode)
-                    return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
-                else
-                    throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
+            using (request)
+                using (var response = await _Client.SendAsync(request, cancellationToken).ConfigureAwait(false))
+                    if (response.IsSuccessStatusCode)
+                        return JsonConvert.DeserializeObject<Model.ListMember>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
+                    else
+                        throw JsonConvert.DeserializeObject<MailChimpException>(await response.Content.ReadAsStringAsync().ConfigureAwait(false), SerializerSettings);
         }
 
         private void Dispose(bool disposing)
