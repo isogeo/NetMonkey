@@ -264,13 +264,14 @@ namespace NetMonkey
                 )
             );
 
-            var request = new HttpRequestMessage(new HttpMethod("PATCH"), uriBuilder.Uri) {
+            var request = new HttpRequestMessage(HttpMethod.Post, uriBuilder.Uri) {
                 Content=new StringContent(
                     JsonConvert.SerializeObject(member, Formatting.None, SerializerSettings),
                     Encoding.UTF8,
                     _JsonMediaType
                 )
             };
+            request.Headers.Add("X-HTTP-Method-Override", "PATCH");
             using (request)
                 using (var response = await _Client.SendAsync(request, cancellationToken).ConfigureAwait(false))
                     if (response.IsSuccessStatusCode)
