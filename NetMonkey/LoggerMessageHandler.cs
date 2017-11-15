@@ -25,6 +25,10 @@ namespace NetMonkey
             HttpResponseMessage ret = null;
 
             if ((request.Content!=null) && (_Logger.IsTraceEnabled))
+            {
+                // Necessary as the content will be read multiple times
+                await request.Content.LoadIntoBufferAsync()
+                    .ConfigureAwait(false);
                 _Logger.InfoFormat(
                     CultureInfo.CurrentCulture,
                     "{1} {0}: \"{2}\"",
@@ -33,7 +37,7 @@ namespace NetMonkey
                     await request.Content.ReadAsStringAsync()
                         .ConfigureAwait(false)
                 );
-            else
+            } else
                 _Logger.InfoFormat(
                     CultureInfo.CurrentCulture,
                     "{1} {0}",
@@ -51,6 +55,10 @@ namespace NetMonkey
             if (ret!=null)
             {
                 if (ret.Content!=null)
+                {
+                    // Necessary as the content will be read multiple times
+                    await ret.Content.LoadIntoBufferAsync()
+                        .ConfigureAwait(false);
                     _Logger.TraceFormat(
                         CultureInfo.InvariantCulture,
                         "{1} {0} - {2} ({3}) {4}ms: \"{5}\"",
@@ -62,7 +70,7 @@ namespace NetMonkey
                         await ret.Content.ReadAsStringAsync()
                             .ConfigureAwait(false)
                     );
-                else
+                } else
                     _Logger.TraceFormat(
                         CultureInfo.InvariantCulture,
                         "{1} {0} - {2} ({3}) {4}ms",
