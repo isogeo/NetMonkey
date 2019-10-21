@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
 [assembly: AssemblyTitle("NetMonkey")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("NetMonkey is a .NET wrapper for the MailChimp API v3.0.")]
 [assembly: AssemblyCulture("")]
 
 [assembly: NeutralResourcesLanguage("en-US")]
