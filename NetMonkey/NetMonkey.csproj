@@ -1,9 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
     <version>3.1.4.0</version>
-    <RootNamespace>NetMonkey</RootNamespace>
-    <AssemblyName>NetMonkey</AssemblyName>
     <PackageProjectUrl>http://geosikdev.blogspot.com/</PackageProjectUrl>
     <Authors>dev@isogeo.com</Authors>
     <RepositoryUrl>https://github.com/isogeo/NetMonkey</RepositoryUrl>
@@ -13,6 +10,11 @@
     <Copyright>Copyright © 2012-2019 Isogeo</Copyright>
     <Description>NetMonkey is a .NET wrapper for the MailChimp API v3.0.</Description>
     <PackageDescription>NetMonkey is a .NET wrapper for the MailChimp API v3.0.</PackageDescription>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net45</TargetFramework>
+    <RootNamespace>NetMonkey</RootNamespace>
+    <AssemblyName>NetMonkey</AssemblyName>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DocumentationFile>bin\$(Configuration)\NetMonkey.xml</DocumentationFile>
@@ -32,14 +34,6 @@
     <AssemblyOriginatorKeyFile>..\NetMonkey.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>Ce projet fait référence à des packages NuGet qui sont manquants sur cet ordinateur. Activez l'option de restauration des packages NuGet pour les télécharger. Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkID=322105. Le fichier manquant est le suivant : {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
-  </Target>
   <ItemGroup>
     <PackageReference Include="Common.Logging" Version="3.3.1" />
     <PackageReference Include="Common.Logging.Core" Version="3.3.1" />

@@ -15,7 +15,6 @@ NetMonkey is [another .NET wrapper](http://apidocs.mailchimp.com/api/downloads/#
 
 ## Build
 
-- Run the following command from this directory: `build.bat`
 - Prerequisites:
   * Microsoft .NET Framework 4.5
   * Microsoft Visual Studio 2015
@@ -26,5 +25,4 @@ NetMonkey is [another .NET wrapper](http://apidocs.mailchimp.com/api/downloads/#
 
 ## Development
 
-- Run `build.bat` to resolve NuGet dependencies beforehand, or the Visual Studio solutions will not load.
-- The `NetMonkey.Tests.sln` solution is meant to be used for development. This and other solutions are used by the build scripts.
+- The `NetMonkey.Tests.sln` solution is meant to be used for development.
