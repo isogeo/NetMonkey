@@ -1,9 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
     <version>3.1.4.0</version>
-    <RootNamespace>NetMonkey</RootNamespace>
-    <AssemblyName>NetMonkey</AssemblyName>
     <PackageProjectUrl>http://geosikdev.blogspot.com/</PackageProjectUrl>
     <Authors>dev@isogeo.com</Authors>
     <RepositoryUrl>https://github.com/isogeo/NetMonkey</RepositoryUrl>
@@ -13,6 +10,11 @@
     <Copyright>Copyright © 2012-2019 Isogeo</Copyright>
     <Description>NetMonkey is a .NET wrapper for the MailChimp API v3.0.</Description>
     <PackageDescription>NetMonkey is a .NET wrapper for the MailChimp API v3.0.</PackageDescription>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net45</TargetFramework>
+    <RootNamespace>NetMonkey</RootNamespace>
+    <AssemblyName>NetMonkey</AssemblyName>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DocumentationFile>bin\$(Configuration)\NetMonkey.xml</DocumentationFile>
