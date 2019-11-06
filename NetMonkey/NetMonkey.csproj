@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <version>3.1.4.0</version>
+    <version>3.1.4.32</version>
     <PackageProjectUrl>http://geosikdev.blogspot.com/</PackageProjectUrl>
     <Authors>dev@isogeo.com</Authors>
     <RepositoryUrl>https://github.com/isogeo/NetMonkey</RepositoryUrl>
@@ -32,7 +32,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\NetMonkey.snk</AssemblyOriginatorKeyFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Common.Logging" Version="3.3.1" />
