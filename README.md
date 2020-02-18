@@ -1,4 +1,5 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/e83vlonrwpuhmq5m/branch/master?svg=true)](https://ci.appveyor.com/project/mcartoixa/netmonkey/branch/master)
+[![Build Status](https://dev.azure.com/isogeo/Isogeo%20API/_apis/build/status/isogeo.NetMonkey?branchName=master)](https://dev.azure.com/isogeo/Isogeo%20API/_build/latest?definitionId=44&branchName=master)
 
 NetMonkey
 =========
